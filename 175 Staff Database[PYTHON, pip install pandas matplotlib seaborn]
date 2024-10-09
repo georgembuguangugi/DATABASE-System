@@ -1,0 +1,94 @@
+# Importing necessary libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Initialize the data for 175 staff members
+# Create an empty DataFrame to hold the data
+columns = ['Staff_ID', 'Name', 'Department', 'Age', 'Years_of_Experience', 'Salary', 'Phone_Models_Produced']
+staff_data = pd.DataFrame(columns=columns)
+
+# Input data for each staff member
+def input_data():
+    global staff_data
+    for i in range(175):
+        staff_id = input(f"Enter Staff ID for employee {i + 1}: ")
+        name = input(f"Enter Name for employee {i + 1}: ")
+        department = input(f"Enter Department for employee {i + 1} (e.g., 'Design', 'Assembly', 'QC'): ")
+        age = int(input(f"Enter Age for employee {i + 1}: "))
+        experience = int(input(f"Enter Years of Experience for employee {i + 1}: "))
+        salary = float(input(f"Enter Salary for employee {i + 1} in USD: "))
+        phone_models = int(input(f"Enter Number of Phone Models Produced for employee {i + 1}: "))
+        
+        staff_data = staff_data.append({
+            'Staff_ID': staff_id,
+            'Name': name,
+            'Department': department,
+            'Age': age,
+            'Years_of_Experience': experience,
+            'Salary': salary,
+            'Phone_Models_Produced': phone_models
+        }, ignore_index=True)
+
+# Analyze the data
+def analyze_data():
+    global staff_data
+    print("\n--- Data Analysis ---\n")
+    print("Descriptive statistics of the data:\n")
+    print(staff_data.describe())
+    
+    # Grouping by department
+    department_analysis = staff_data.groupby('Department').mean()
+    print("\nAverage statistics by Department:\n")
+    print(department_analysis)
+    
+    # Checking correlation between experience, salary, and production
+    print("\nCorrelation between Years_of_Experience, Salary, and Phone_Models_Produced:\n")
+    print(staff_data[['Years_of_Experience', 'Salary', 'Phone_Models_Produced']].corr())
+
+# Visualize the data
+def visualize_data():
+    global staff_data
+    
+    # Distribution of staff ages
+    plt.figure(figsize=(10,6))
+    sns.histplot(staff_data['Age'], bins=10, kde=True, color='blue')
+    plt.title('Age Distribution of Staff Members')
+    plt.xlabel('Age')
+    plt.ylabel('Frequency')
+    plt.show()
+
+    # Salary distribution across departments
+    plt.figure(figsize=(10,6))
+    sns.boxplot(x='Department', y='Salary', data=staff_data)
+    plt.title('Salary Distribution by Department')
+    plt.xlabel('Department')
+    plt.ylabel('Salary (USD)')
+    plt.show()
+    
+    # Experience vs Phone Models Produced
+    plt.figure(figsize=(10,6))
+    sns.scatterplot(x='Years_of_Experience', y='Phone_Models_Produced', hue='Department', data=staff_data)
+    plt.title('Experience vs Phone Models Produced')
+    plt.xlabel('Years of Experience')
+    plt.ylabel('Phone Models Produced')
+    plt.show()
+    
+    # Salary vs Experience
+    plt.figure(figsize=(10,6))
+    sns.lineplot(x='Years_of_Experience', y='Salary', data=staff_data)
+    plt.title('Years of Experience vs Salary')
+    plt.xlabel('Years of Experience')
+    plt.ylabel('Salary (KES)
+    plt.show()
+
+# Main program function
+def main():
+    print("Welcome to the Staff Data Analysis System.")
+    input_data()
+    analyze_data()
+    visualize_data()
+
+# Run the program
+if __name__ == '__main__':
+    main()
